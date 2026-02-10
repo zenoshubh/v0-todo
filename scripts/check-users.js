@@ -1,16 +1,21 @@
+import { execSync } from 'child_process'
 import { PrismaClient } from '@prisma/client'
 import { PrismaPg } from '@prisma/adapter-pg'
 
-const adapter = new PrismaPg({
-  connectionString: process.env.NEON_DATABASE_URL,
-})
-
-const prisma = new PrismaClient({
-  adapter,
-})
-
 async function checkUsers() {
   try {
+    // Generate Prisma client first
+    console.log('[v0] Generating Prisma client...')
+    execSync('npx prisma generate', { stdio: 'inherit' })
+    
+    const adapter = new PrismaPg({
+      connectionString: process.env.NEON_DATABASE_URL,
+    })
+
+    const prisma = new PrismaClient({
+      adapter,
+    })
+    
     console.log('[v0] Checking for users in database...')
     const users = await prisma.user.findMany()
     
@@ -22,10 +27,11 @@ async function checkUsers() {
         console.log(`  ${index + 1}. Email: ${user.email}, Name: ${user.name || 'N/A'}, Created: ${user.createdAt}`)
       })
     }
+    
+    await prisma.$disconnect()
   } catch (error) {
     console.error('[v0] Error checking users:', error.message)
-  } finally {
-    await prisma.$disconnect()
+    process.exit(1)
   }
 }
 
