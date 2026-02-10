@@ -9,11 +9,11 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { LogOut } from "lucide-react"
 
-export default async function HomePage() {
+export default async function ActivePage() {
   const session = await auth()
   if (!session?.user) redirect("/login")
 
-  const todos = await getTodos("all")
+  const todos = await getTodos("active")
 
   return (
     <div className="mx-auto flex min-h-screen max-w-2xl flex-col">
@@ -34,7 +34,7 @@ export default async function HomePage() {
         <AddTodoForm />
         <FilterTabs />
         <CardContent className="flex-1 overflow-auto p-0">
-          <TodoList todos={todos} filter="all" />
+          <TodoList todos={todos} filter="active" />
         </CardContent>
       </Card>
     </div>

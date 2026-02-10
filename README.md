@@ -1,4 +1,10 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app). It includes a **Todo app** with **NextAuth credentials** and Prisma.
+
+## Todo App Setup
+
+1. **Environment**: In `.env`, set `AUTH_SECRET` (e.g. run `openssl rand -base64 32` and paste the result).
+2. **Database**: Run migrations: `pnpm exec prisma migrate dev --name init` (or deploy migrations in production).
+3. **Run**: `pnpm dev` and open [http://localhost:3000](http://localhost:3000). Sign up at `/register`, then use the todo list at `/`.
 
 ## Getting Started
 
