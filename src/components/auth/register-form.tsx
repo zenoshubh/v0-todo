@@ -1,7 +1,8 @@
 "use client"
 
-import { useActionState } from "react"
+import { useActionState, useState } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { register } from "@/lib/actions/auth"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -15,12 +16,24 @@ import {
 } from "@/components/ui/card"
 
 export function RegisterForm() {
+  const [preview, setPreview] = useState<string | null>(null)
   const [state, formAction] = useActionState(
     async (_: unknown, formData: FormData) => {
       return register(formData)
     },
     null as { error?: string } | null
   )
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setPreview(reader.result as string)
+      }
+      reader.readAsDataURL(file)
+    }
+  }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-muted/30 px-4">
@@ -36,6 +49,30 @@ export function RegisterForm() {
             {state?.error && (
               <p className="text-destructive text-sm">{state.error}</p>
             )}
+            <div className="space-y-2">
+              <label htmlFor="profileImage" className="text-sm font-medium">
+                Profile Image (optional)
+              </label>
+              <div className="flex flex-col gap-2">
+                {preview && (
+                  <div className="relative w-24 h-24 rounded-lg overflow-hidden">
+                    <Image
+                      src={preview}
+                      alt="Profile preview"
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                )}
+                <Input
+                  id="profileImage"
+                  name="profileImage"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                />
+              </div>
+            </div>
             <div className="space-y-2">
               <label htmlFor="name" className="text-sm font-medium">
                 Name (optional)

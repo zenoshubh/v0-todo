@@ -23,7 +23,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           String(credentials.password),
           user.password
         )
-        return ok ? { id: user.id, email: user.email, name: user.name } : null
+        return ok ? { id: user.id, email: user.email, name: user.name, profileImage: user.profileImage } : null
       },
     }),
   ],

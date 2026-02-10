@@ -9,12 +9,14 @@ export const authConfig: NextAuthConfig = {
       if (user) {
         token.id = user.id
         token.email = user.email
+        token.profileImage = user.profileImage
       }
       return token
     },
     session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string
+        session.user.profileImage = token.profileImage as string | null
       }
       return session
     },
