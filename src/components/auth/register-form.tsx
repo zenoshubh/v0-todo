@@ -19,8 +19,6 @@ export function RegisterForm() {
   const [preview, setPreview] = useState<string | null>(null)
   const [state, formAction] = useActionState(
     async (_: unknown, formData: FormData) => {
-      const file = formData.get("profileImage") as File | null
-      console.log("[v0] Form submission - File:", file?.name, "Size:", file?.size, "Type:", file?.type)
       return register(formData)
     },
     null as { error?: string } | null
