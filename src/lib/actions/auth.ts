@@ -28,11 +28,15 @@ export async function register(formData: FormData) {
   if (profileImageFile && profileImageFile.size > 0) {
     try {
       const buffer = await profileImageFile.arrayBuffer()
+      console.log("[v0] Uploading image:", profileImageFile.name, "Size:", profileImageFile.size)
       const blob = await put(`profile-images/${Date.now()}-${profileImageFile.name}`, buffer, {
         access: "public",
+        contentType: profileImageFile.type,
       })
       profileImageUrl = blob.url
-    } catch {
+      console.log("[v0] Image uploaded successfully:", profileImageUrl)
+    } catch (error) {
+      console.error("[v0] Image upload error:", error)
       return { error: "Failed to upload profile image" }
     }
   }
